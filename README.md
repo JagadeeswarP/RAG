@@ -1,41 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.6;
-            margin: 40px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2, h3 {
-            color: #222;
-        }
-        code, pre {
-            background-color: #eee;
-            padding: 10px;
-            border-radius: 5px;
-            display: block;
-            overflow-x: auto;
-        }
-        ul {
-            margin-left: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        footer {
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: #666;
-        }
-    </style>
+
 </head>
 <body>
     <div class="container">
@@ -106,3 +72,4 @@
     </div>
 </body>
 </html>
+
