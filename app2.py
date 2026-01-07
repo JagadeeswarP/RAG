@@ -12,9 +12,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_groq import ChatGroq
 
-# =========================
-# SESSION STATE INIT
-# =========================
 if "vectorstore" not in st.session_state:
     st.session_state.vectorstore = None
 
@@ -27,21 +24,14 @@ if "query" not in st.session_state:
 if "answer" not in st.session_state:
     st.session_state.answer = ""
 
-# =========================
-# CLEAR ALL
-# =========================
+-
 def clear_all():
     st.session_state.vectorstore = None
     st.session_state.query = ""
     st.session_state.answer = ""
     st.rerun()
 
-
-
-# =========================
-# SIDEBAR – GROQ
-# =========================
-st.sidebar.title("🔑 Groq Configuration")
+st.sidebar.title(" Groq Configuration")
 
 GROQ_API_KEY = st.sidebar.text_input(
     "Enter Groq API Key",
@@ -69,9 +59,6 @@ llm = ChatGroq(
     temperature=0.2
 )
 
-# =========================
-# FASTEMBED (LOCAL)
-# =========================
 @st.cache_resource
 def load_embedding_model():
     return TextEmbedding(
@@ -81,12 +68,9 @@ def load_embedding_model():
 embedding_model = load_embedding_model()
 
 def generate_embedding(text: str):
-    # FastEmbed returns generator → convert to list
+
     return list(embedding_model.embed([text]))[0]
 
-# =========================
-# PROCESS INPUT
-# =========================
 def process_input(input_type, input_data):
 
     if input_type == "Link":
@@ -131,9 +115,6 @@ def process_input(input_type, input_data):
     vectorstore.add_texts(chunks)
     return vectorstore
 
-# =========================
-# ANSWER QUESTION
-# =========================
 def answer_question(vectorstore, query):
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
@@ -159,21 +140,16 @@ Answer:
     response = llm.invoke(prompt)
     return response.content.strip()
 
-# =========================
-# STREAMLIT UI
-# =========================
 def main():
     st.set_page_config(page_title="RAG Assistant (FastEmbed)", layout="wide")
     st.title("Jagadeeswar's RAG Assistant")
     st.caption("FAISS • FastEmbed (Local) • Groq Inference")
 
-    # Clear button
     col1, _ = st.columns([1, 6])
     with col1:
         if st.button("🧹 Clear All"):
             clear_all()
 
-    # Input type (auto-reset)
     input_type = st.selectbox(
         "Input Type",
         ["Link", "PDF", "DOCX", "TXT", "Text"],
@@ -186,7 +162,6 @@ def main():
         st.session_state.query = ""
         st.session_state.answer = ""
 
-    # Input UI
     if input_type == "Link":
         input_data = st.text_input("Enter URL")
     elif input_type == "Text":
@@ -194,7 +169,6 @@ def main():
     else:
         input_data = st.file_uploader("Upload file")
 
-    # Process input
     if st.button("Process Input"):
         if not input_data:
             st.error("Input required")
@@ -203,7 +177,6 @@ def main():
                 st.session_state.vectorstore = process_input(input_type, input_data)
                 st.success("Ready for questions!")
 
-    # Question & Answer
     if st.session_state.vectorstore:
         st.session_state.query = st.text_input(
             "Ask a question",
